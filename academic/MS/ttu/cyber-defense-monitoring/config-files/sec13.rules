@@ -1,0 +1,14 @@
+# iptables -A INPUT -j LOG --log-prefix 'iptables: '
+# iptables -A INPUT -j DROP
+#
+# Sep 24 19:08:06 ristov kernel: iptables: IN=eth0 OUT= MAC=00:13:72:8a:83:d2:00:1b:25:07:e2:1b:08:00 SRC=10.6.27.1 DST=10.2.5.5 LEN=60 TOS=0x00 PREC=0x00 TTL=62 ID=1881 DF PROTO=TCP SPT=34342 DPT=23 WINDOW=5840 RES=0x00 SYN URGP=0
+
+type=Single
+ptype=PerlFunc
+pattern=sub { \
+  if ($_[0] =~ \
+      /kernel: iptables:.* SRC=([\d.]+).* PROTO=(\w+).* DPT=(\d*)/ \
+      && $1 ne "172.26.241.146") { return ($1, $2, $3); } \
+  else { return 0; } }
+desc=Dropped packet from source $1 protocol $2 destport $3
+action=write - %s

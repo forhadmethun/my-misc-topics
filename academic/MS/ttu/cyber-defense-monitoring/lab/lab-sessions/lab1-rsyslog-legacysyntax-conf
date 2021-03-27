@@ -1,0 +1,102 @@
+##########################################################################
+
+# debug-level messages go to /var/log/debug.log
+*.=debug	/var/log/debug.log;RSYSLOG_FileFormat
+
+# info..err -level messages (i.e., messages from info below crit-level) 
+# go to /var/log/info-err.log
+*.info;*.!crit		/var/log/info-err.log;RSYSLOG_FileFormat
+
+# messages from crit-level up to the highest level (emerg)
+# go to /var/log/crit-emerg.log
+*.crit		/var/log/crit-emerg.log;RSYSLOG_FileFormat
+
+# send emerg-level messages to all terminals
+*.emerg         :omusrmsg:*
+
+# the statement below is an old syntax which works with rsyslog 7 and 8,
+# but produces a warning message
+#*.emerg		*
+
+# Apache web server messages
+if $programname == 'apache' then /var/log/apache.log
+
+# send messages with mail or daemon facility and of notice..alert -level 
+# to central log server (i.e., all mail and daemon messages starting from 
+# notice, excluding emerg)
+mail,daemon.notice;mail,daemon.!=emerg	@192.168.56.1
+
+# for debugging the previous statement
+#mail,daemon.notice;mail,daemon.!=emerg	/var/log/debug-remote
+
+##########################################################################
+
+# accept syslog messages from remote hosts on port 514/udp
+# (incoming messages can be both in BSD or IETF format)
+$ModLoad imudp.so
+$UDPServerRun 514
+
+##########################################################################
+
+# Load TCP input module
+$ModLoad imtcp
+
+# use GNU TLS driver, set up server/CA certificates and server key
+$DefaultNetstreamDriver gtls
+$DefaultNetstreamDriverCAFile /usr/local/etc/syslog/ca/cert.pem
+$DefaultNetstreamDriverCertFile /usr/local/etc/syslog/ssl/cert.pem
+$DefaultNetstreamDriverKeyFile /usr/local/etc/syslog/ssl/key.pem
+
+# clients are not authenticated, anyone can connect
+$InputTCPServerStreamDriverAuthMode anon
+
+# force the use of encryption (0 means “no encryption”, and with this
+# setting log messages have to be sent in clear text, e.g., with netcat)
+$InputTCPServerStreamDriverMode 1
+
+# accept IETF TLS messages from 10514/tcp (the server is also able 
+# to process newline separated messages in BSD syslog format)
+$InputTCPServerRun 10514
+
+
+# if a separate processing flow needs to be configured for servers
+# at 514/udp and 10514/tcp, one can comment out the directives
+# $UDPServerRun 514 and $InputTCPServerRun 10514, activating the following
+# configuration instead:
+#
+# template (name="hostlog" type="string" string="/var/log/%fromhost-ip%/%$now%.log")
+#
+# template(name="messageformat"
+#          type="string"
+#          string="%timegenerated% %HOSTNAME% %pri-text% %syslogtag% %msg%\n")
+#
+# ruleset(name="network") {
+#   action(type="omfile" dynaFile="hostlog" Template="messageformat")
+# }
+#
+# input(type="imudp" port="514" ruleset="network")
+# input(type="imtcp" port="10514" ruleset="network")
+
+##########################################################################
+
+# use GNU TLS driver, set up CA certificate
+$DefaultNetstreamDriver gtls
+$DefaultNetstreamDriverCAFile /usr/local/etc/syslog/ca/cert.pem
+
+# authenticate the server - check the validity of the certificate and the server 
+# name in the certificate (* matches all single-part server names without dots, 
+# but you can also use specific names like some.test.mydomain)
+$ActionSendStreamDriverAuthMode x509/name
+$ActionSendStreamDriverPermittedPeer *
+
+# force the use of encryption
+$ActionSendStreamDriverMode 1
+
+# send daemon messages to server 192.168.56.1 port 6514/tcp
+# @@ - send over TCP; (o) - instead of newlines between syslog messages,
+# put message length in front of each message; the RSYSLOG_Syslog-
+# Protocol23Format template specifies IETF syslog format each message
+daemon.*        @@(o)192.168.56.1:6514;RSYSLOG_SyslogProtocol23Format
+
+# send daemon messages in IETF format over UDP
+daemon.*        @192.168.56.1:8514;RSYSLOG_SyslogProtocol23Format

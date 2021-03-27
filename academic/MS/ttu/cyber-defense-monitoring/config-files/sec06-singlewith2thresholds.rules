@@ -1,0 +1,13 @@
+# Sep 29 19:31:26 ristov sshd[18644]: Failed password for invalid user ristov from 10.2.41.14 port 52570 ssh2
+
+type=SingleWith2Thresholds
+ptype=RegExp
+pattern=sshd\[\d+\]: Failed .+ for invalid user \S+ from ([\d.]+) port \d+ ssh2
+desc=Repeated ssh probing of non-existing users from $1
+action=shellcmd /sbin/iptables -I INPUT -p tcp -s $1 --dport 22 -j DROP
+thresh=5
+window=300
+desc2=Allow ssh access again for $1
+action2=shellcmd /sbin/iptables -D INPUT -p tcp -s $1 --dport 22 -j DROP
+thresh2=0
+window2=3600

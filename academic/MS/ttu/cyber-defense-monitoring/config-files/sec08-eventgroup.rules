@@ -1,0 +1,12 @@
+type=EventGroup3
+ptype=RegExp
+pattern=sshd\[\d+\]: Failed password for \S+ from ([\d.]+) port \d+ ssh2
+thresh=5
+ptype2=RegExp
+pattern2=kernel: iptables:.* SRC=([\d.]+) .* PROTO=TCP .* DPT=23\b
+thresh2=2
+ptype3=RegExp
+pattern3=kernel: iptables:.* SRC=([\d.]+) .* PROTO=TCP .* DPT=25\b
+desc=Too many failed logins and blocked packets for $1 within 5 minutes
+action=pipe '%s' mail root@localhost
+window=300

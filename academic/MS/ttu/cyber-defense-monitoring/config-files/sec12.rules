@@ -1,0 +1,20 @@
+# iptables -A INPUT -j LOG --log-prefix 'iptables: '
+# iptables -A INPUT -j DROP
+#
+# Sep 24 19:08:06 ristov kernel: iptables: IN=eth0 OUT= MAC=00:13:72:8a:83:d2:00:1b:25:07:e2:1b:08:00 SRC=10.6.27.1 DST=10.2.5.5 LEN=60 TOS=0x00 PREC=0x00 TTL=62 ID=1881 DF PROTO=TCP SPT=34342 DPT=23 WINDOW=5840 RES=0x00 SYN URGP=0
+
+type=Single
+ptype=RegExp
+pattern=kernel: iptables:.* SRC=([\d.]+).* PROTO=(\w+).*\
+ SPT=(\d+) DPT=(\d+)
+context=$3 -> ( sub { return ($_[0] < 1024); } )
+desc=Dropped packet from privileged port: from $1 to $4/$2
+action=write - %s
+
+type=Single
+ptype=RegExp
+pattern=kernel: iptables:.* SRC=([\d.]+).* PROTO=(\w+).*\
+ SPT=(\d+) DPT=(\d+)
+context= =($3 > 1023)
+desc=Dropped packet from unprivileged port: from $1 to $4/$2
+action=write - %s

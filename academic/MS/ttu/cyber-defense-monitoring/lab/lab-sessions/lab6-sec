@@ -1,0 +1,55 @@
+# ----- Task 1 -----
+
+type=SingleWithThreshold
+ptype=RegExp
+pattern=kernel: iptables:.* SRC=([\d.]+)
+desc=Too many blocked packets from IP $1
+action=pipe '%s' logger -p daemon.warning -t SEC
+thresh=10
+window=300
+
+# ----- Task 2 -----
+# This rule blocks the offending IP entirely by inserting a DROP
+# rule in the beginning of the INPUT chain. This will prevent
+# the IP from accessing public services in the system and will also
+# suppress further netfilter log messages for this IP.
+
+type=SingleWithThreshold
+ptype=RegExp
+pattern=kernel: iptables:.* SRC=([\d.]+) .* PROTO=(TCP|UDP) .* DPT=(\d+)
+context=!IP_$1_BLOCKED
+desc=Too many blocked packets from IP $1 to port $3/$2, blocking the source
+action=pipe '%s' logger -p daemon.warning -t SEC; \
+       shellcmd /sbin/iptables -I INPUT -s $1 -j DROP; \
+       create IP_$1_BLOCKED 3600 (shellcmd /sbin/iptables -D INPUT -s $1 -j DROP)
+thresh=10
+window=300
+
+# ----- Task 3 -----
+
+type=PairWithWindow
+ptype=RegExp
+pattern=kernel: iptables:.* SRC=([\d.]+) .* PROTO=TCP .* DPT=25\b
+desc=Source $1 was probing 25/tcp
+action=logonly
+ptype2=RegExp
+pattern2=kernel: iptables:.* SRC=$1 .* PROTO=TCP .* DPT=(?:23|513)\b
+desc2=After 25/tcp probe source %1 probed TELNET/RLOGIN service
+action2=pipe '%s' logger -p daemon.warning -t SEC
+window=300
+
+# ----- Task 4 -----
+
+type=PairWithWindow
+ptype=RegExp
+pattern=kernel: iptables:.* SRC=([\d.]+) .* PROTO=TCP .* DPT=25\b
+context=!IP_$1_LOGIN_PROBES_REPORTED
+desc=Source $1 was probing 25/tcp
+action=logonly
+ptype2=RegExp
+pattern2=kernel: iptables:.* SRC=$1 .* PROTO=TCP .* DPT=(?:23|513)\b
+desc2=After 25/tcp probe source %1 probed TELNET/RLOGIN service
+action2=pipe '%s' logger -p daemon.warning -t SEC; \
+        create IP_%1_LOGIN_PROBES_REPORTED 3600
+window=300
+

@@ -1,0 +1,26 @@
+  0 115: [0] {
+  2 113:   SEQUENCE {
+  4  16:     SET {
+  6   1:       INTEGER 5
+  9   4:       [2] {
+ 11   2:         INTEGER 200
+       :         }
+ 15   5:       [11] {
+ 17   3:         INTEGER 65407
+       :         }
+       :       }
+ 22   1:     BOOLEAN TRUE
+ 25   2:     BIT STRING 5 unused bits
+       :       '011'B
+       :       Error: Spurious zero bits in bitstring.
+ 29  51:     OCTET STRING
+       :       00 01 02 02 02 02 02 02 02 02 02 02 02 02 02 02
+       :       02 02 02 02 02 02 02 02 02 02 02 02 02 02 02 02
+       :       02 02 02 02 02 02 02 02 02 02 02 02 02 02 02 02
+       :       02 02 02
+ 82   0:     NULL
+ 84   8:     OBJECT IDENTIFIER '1 2 116824147953281'
+ 94   6:     PrintableString 'hello.'
+102  13:     UTCTime 23/02/2015 01:09:00 GMT
+       :     }
+       :   }

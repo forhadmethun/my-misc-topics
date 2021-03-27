@@ -1,0 +1,1 @@
+alert tcp $EXTERNAL_NET any -> $HTTP_SERVERS $HTTP_PORTS (msg:"HTTP request for non-.html file"; flow:established,to_server; pcre:!"/\.html$/U"; pcre:!"/^\/$/U"; classtype:web-application-attack; sid:4000011; rev:1;)

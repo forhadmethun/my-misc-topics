@@ -1,0 +1,44 @@
+<head>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <i style="color: red;">Basic Data message</i>
+    <h1>{{message}}</h1>
+    <i style="color:red">conditional</i><br>
+    <span v-if="seen">
+        Now you can see me!!!
+    </span>
+    <br>
+    <i style="color: red;">loop</i>
+    <ol>
+        <li v-for="todo in todos">
+            {{todo.text}}
+        </li>
+    </ol>
+    <br>
+    <i style="color: red;">User input</i><br/>
+    <button v-on:click="reverseMessage">Reverse Message</button>
+    <br> <i style="color: red;">two way binding</i><br/>
+    <input type="text" v-model="message">
+
+    <br><i style="color: red;">Components</i><br/>
+    <ol>
+    <todo-item></todo-item>
+    <todo-item></todo-item>
+    </ol>
+
+    <br><i style="color: red;">Components with props</i><br/>
+    <ol>
+        <todo-item2
+            v-for="item in groceryList"
+            v-bind:todo="item"
+            v-bind:key="item.id"
+        ></todo-item2>
+    </ol>
+
+</div>
+<script src="index.js"></script>
+</body>
+</html>

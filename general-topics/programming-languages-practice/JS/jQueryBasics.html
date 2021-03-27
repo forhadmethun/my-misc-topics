@@ -1,0 +1,152 @@
+<html>
+<head>
+    <!-- get ajax from cdn -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+            // basic structure of jQuery
+            // $(selector).action()
+
+            $(document).ready(function(){
+                document.getElementById("hello").innerHTML = 'Hello forhad';
+
+            //     $("button").click(function(){
+            //       $("p").hide();
+                        
+
+
+            //   });
+
+              $("p").on("click", function(){
+                $(this).hide();
+            });
+
+            $("#button").click(function(){
+        $("p").toggle();
+    });
+
+
+
+
+            });
+            // in short form it could be written as 
+            /*
+            $(function(){
+
+            });
+            */
+            // all <p> elements can be set by 
+                    // $("p")
+            // id can be set by
+            // $("#id")
+
+            // class can be set by
+            // $(".class")
+
+            // callback funciton called when current operation 100% finished 
+
+            // $(selector).hide(speed,callback); 
+
+
+
+            
+
+            
+            
+        </script>
+    </head>
+    <body> 
+     <p id="hello" style="color:red"></p>
+     <p>  i am another line </p>
+     <button id="button">dont click i will hide every "&lt;p&gt;" elements</button>
+
+    <!-- dome manipulation -->
+    <script>
+    $(function(){
+        $("#btn1").click(function(){
+            alert(" Text from Button 1: " + $("test").text());
+        //    alert("Value: " + $("#test").val());
+        //    alert("HTML: " + $("#test").html());
+        //    alert($("#w3s").attr("href"));
+        });
+
+        // text can be set 
+        //   $("#test1").text("Hello world!");
+        //   $("#test2").html("<b>Hello world!</b>");
+        // $("#test3").val("Dolly Duck");
+
+        // append text
+        // $("p").append("Some appended text.");
+
+        // remove
+        // $("#div1").remove(); 
+
+        // empty
+        // $("#div").empty() removes the child elements
+        
+        // adding classes
+        // $("h1, h2, p").addClass("blue");
+        // $("div").addClass("important");
+        //          .removeClass
+        //          .toogleClass
+
+        // set css
+        // css("propertyname","value");
+        // $("p").css("background-color", "yellow");
+        // $("p").css({"background-color": "yellow", "font-size": "200%"});
+
+
+
+    });
+    </script>
+<!-- jQuery AjaX -->
+<!-- 
+$(selector).load(URL,data,callback);
+
+call back -
+===============
+
+$("button").click(function(){
+    $("#div1").load("demo_test.txt", function(responseTxt, statusTxt, xhr){
+        if(statusTxt == "success")
+            alert("External content loaded successfully!");
+        if(statusTxt == "error")
+            alert("Error: " + xhr.status + ": " + xhr.statusText);
+    });
+});
+
+get method 
+============
+$.get(URL,callback);
+
+
+post method
+=============
+$.post(URL,data,callback);
+
+ex- 
+==
+$("button").click(function(){
+    $.post("demo_test_post.asp",
+    {
+        name: "Donald Duck",
+        city: "Duckburg"
+    },
+    function(data, status){
+        alert("Data: " + data + "\nStatus: " + status);
+    });
+});
+
+
+COOL Filter can be implemented by jQuery...!!!
+ -->
+
+
+
+    <p id="test">This is some <b>bold</b> text in a paragraph.</p>
+
+    <button id="btn1">Show Text</button>
+
+
+
+ </body>
+ </html>

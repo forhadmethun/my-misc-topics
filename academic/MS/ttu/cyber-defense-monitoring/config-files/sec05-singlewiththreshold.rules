@@ -1,0 +1,10 @@
+# Sep 29 19:31:26 ristov sshd[18644]: Failed password for invalid user ristov from 10.2.41.14 port 52570 ssh2
+
+type=SingleWithThreshold
+ptype=RegExp
+pattern=sshd\[\d+\]: Failed .+ for invalid user (\S+) from ([\d.]+) port \d+ ssh2
+desc=Repeated ssh probing of user $1 from $2
+action=pipe '%s' mail -s 'probing from $2' root@localhost; \
+       pipe '%s' logger -p authpriv.info -t sec
+thresh=5
+window=300

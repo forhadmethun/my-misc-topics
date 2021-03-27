@@ -1,0 +1,77 @@
+@version:3.27
+
+# ---------- Task 1 ----------
+
+options { keep_hostname(yes); log_fifo_size(20000); };
+
+# read local messages on Centos 7 and 8
+source local { systemd-journal(); };
+
+# Read local messages on Centos 5 and 6
+#source local { file("/proc/kmsg"); unix-dgram("/dev/log"); };
+
+destination maillog { file("/var/log/maillog"); };
+destination cronlog { file("/var/log/cron"); };
+destination authprivlog { file("/var/log/secure"); };
+destination genericlog { file("/var/log/messages"); };
+
+filter mailfilter { facility(mail); };
+filter cronfilter { facility(cron); };
+filter authprivfilter { facility(authpriv); };
+
+filter genericfilter { not facility(mail, cron, authpriv) and level(info..emerg); };
+
+log { source(local); filter(mailfilter); destination(maillog); };
+log { source(local); filter(cronfilter); destination(cronlog); };
+log { source(local); filter(authprivfilter); destination(authprivlog); };
+log { source(local); filter(genericfilter); destination(genericlog); };
+
+# ---------- Task 2 ----------
+
+filter critical_fatal { message('critical|fatal'); };
+
+# Note that in syslog-ng-3.0, rewrite rules don't work for a number
+# of macros which are read-only (including PRI). Therefore, a template
+# based approach has to be used which is also syslog-ng-2.0 compliant
+
+template user_alert { template("<9>$DATE $HOST $MSGHDR$MSG"); };
+
+destination logserver { network("192.168.56.1" transport(udp) port(514) 
+                                template(user_alert)); };
+
+log { source(local); filter(critical_fatal); destination(logserver); };
+
+# ---------- Task 3 ----------
+
+# Template-based way to solve the task (backward compatible with syslog-ng 2.x)
+#
+# Note that if incoming message is read from journal, some versions of 
+# syslog-ng (e.g., syslog-ng-3.7.3) do not set the PROGRAM macro to syslog
+# TAG field, but rather to the name of the logging program which can be 
+# obtained from the journal. For example, if Apache log messages are written 
+# to syslog with /usr/bin/logger -t apache, PROGRAM would be set to 'logger',
+# not 'apache'. Although syslog-ng 3.6 and 3.10 do not feature this behavior,
+# the filter below has been written solely for message field, in order to
+# be compatible with systemd-journal() driver of all versions.
+
+filter firefoxfilter { message('Gecko/[0-9]+ Firefox/[0-9.]+'); };
+
+template firefox { template("$DATE $HOST firefox: $MSG\n"); };
+ 
+destination firefoxlog { file("/var/log/firefox-$YEAR$MONTH$DAY" template(firefox)); };
+ 
+log { source(local); filter(firefoxfilter); destination(firefoxlog); };
+
+# Rewrite-based way to solve the task (in syslog-ng 3.x style):
+#
+#filter firefoxfilter { message('Gecko/[0-9]+ Firefox/[0-9.]+'); };
+#
+#rewrite rwfirefox { subst('^.+$', 'firefox', value(PROGRAM)); };
+#
+### Note that for changing the entire value of macro, we can also use set()!
+### rewrite rwfirefox { set('firefox', value(PROGRAM)); };
+#
+#destination firefoxlog { file("/var/log/firefox-$YEAR$MONTH$DAY"); };
+#
+#log { source(local); filter(firefoxfilter); rewrite(rwfirefox); destination(firefoxlog); };
+

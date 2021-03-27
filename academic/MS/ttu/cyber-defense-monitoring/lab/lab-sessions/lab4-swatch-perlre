@@ -1,0 +1,79 @@
+# this rule is for debugging purposes only
+watchfor /sshd\[\d+\]: Failed password for (?:invalid user )?\S+ from ([\d.]+) /
+exec echo failed password from $1
+continue
+
+# block offending hosts from which too many SSH login failures have been seen  
+watchfor /sshd\[\d+\]: Failed password for (?:invalid user )?\S+ from (?!127\.0\.0\.1 )([\d.]+) /
+threshold track_by=$1, type=both, count=3, seconds=60
+exec /sbin/iptables -A INPUT -s $1 -p tcp --dport 22 -j DROP; sleep 60; /sbin/iptables -D INPUT -s $1 -p tcp --dport 22 -j DROP
+
+# ------------------------------------------------------------------------
+
+# Match characters between the first two occurrences of the "00" string --
+# lazy quantifier *? ensures that we will fetch characters only up to the
+# second "00" and not to the last one:
+
+00(.*?)00
+
+# Match characters between the last two occurrences of the "00" string --
+# since the expression starts with .*, greedy quantifier * forces .* to 
+# match as many characters as possible, and therefore the following
+# 00(.*)00 will match the last two occurrences of "00" and characters 
+# between them:
+
+.*00(.*)00
+
+# Match the string which begins with a sequence of letters which is not
+# followed by 99.
+# It is tempting to begin with an expression:
+# ^([a-z]+)(?!99)
+# In other words, match a sequence of letters and use negative lookahead 
+# (?!99) for verifying that 99 does not follow the sequence. Unfortunately,
+# this will not work due to backtracking. 
+# For example, if the string is "abc99", then after [a-z]+ has matched "abc"
+# and overall match has failed, the engine will backtrack and [a-z]+ matches
+# "ab". However, since the sequence "ab" is not followed by 99 but rather
+# "c99", an overall match is achieved.
+# In order to avoid backtracking, [a-z]+ has to be rewritten:
+
+^([a-z]++)(?!99)
+
+# Extract a double-quoted substring from the string, allowing for escaped
+# double-quotes inside extracted substring.
+#
+# solution which employs negative lookbehind
+# negative lookbehind (?<!\\) is used for making sure that \ does not 
+# precede the closing double-quote
+
+"(.*?)(?<!\\)"
+
+# solution which employs possessive quantifier
+#
+# [^"] - matches any character that is not double-quote
+# \\"  - matches a backshash that is followed by " character
+#
+# We could begin with "(([^"]|\\")*)" but this fails to match \" properly, 
+# since [^"] comes before \\" in the alternation and always matches \"
+# When we swap parts of the alternation, we will get
+# "((\\"|[^"])*)"
+# Unfortunately, this mistakenly matches strings without terminating double-
+# quote, if there is escaped double-quote present, e.g.:
+# aaa"bbb\"ccc  will set $1 to bbb\
+# This due to backtracking -- when terminating " is not found, the engine
+# moves back, until it discovers escaped double-quote. Since \" was
+# originally matched by the first part of the alternation, the engine now
+# tries the second part that is still unexplored. Since [^"] matches \,
+# the engine moves forward, and since the following " does not match
+# the whole alternation, but rather the following ", then an overall match
+# has been achieved.
+# In order to avoid backtracking, we must rewrite (\\"|[^"])* as
+# (\\"|[^"])*+ , and the resulting expression is:
+
+"((\\"|[^"])*+)"
+
+In order to allow escaping the backslash itself with a backslash, so that
+the expression would consider the string "abc\\" valid and set $1 to abc\\,
+the expression could be rewritten as:
+
+"((\\.|[^"])*+)"

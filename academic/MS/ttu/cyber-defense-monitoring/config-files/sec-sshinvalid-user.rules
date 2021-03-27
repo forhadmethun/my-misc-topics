@@ -1,0 +1,13 @@
+type=Single
+ptype=RegExp
+pattern=sshd\[\d+\]: Failed .+ for invalid user (\S+)\
+ from [\d.]+ port \d+ ssh2
+context=!COUNTING_OFF && \
+  $1 -> ( sub { my($t) = time(); my($u) = $_[0]; $accounts{$u} = $t; \
+  foreach $u (keys %accounts) { \
+    if ($t - $accounts{$u} > 60) { delete $accounts{$u}; } \
+  } if (scalar(keys %accounts) == 5) { %accounts = (); return 1; } \
+    else { return 0; } } )
+desc=SSH login failed for $1
+action=write - five distinct invalid user accounts probed; \
+       create COUNTING_OFF 3600

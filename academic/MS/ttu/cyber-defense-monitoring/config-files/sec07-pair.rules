@@ -1,0 +1,15 @@
+# Oct  2 13:37:45 ristov sshd[23044]: Failed password for risto from 10.6.27.6 port 48030 ssh2
+# Oct  2 13:38:24 ristov sshd[23049]: Accepted password for risto from 10.6.27.6 port 54385 ssh2
+
+type=Pair
+ptype=RegExp
+pattern=sshd\[\d+\]: Failed password for (\S+) from ([\d.]+) port \d+ ssh2
+context=!LOGACTIVE_$2
+desc=Failed login for user $1 from $2
+action=shellcmd /sbin/iptables -I INPUT -s $2 -j LOG; \
+       create LOGACTIVE_$2 3600 (shellcmd /sbin/iptables -D INPUT -s $2 -j LOG)
+ptype2=RegExp
+pattern2=sshd\[\d+\]: Accepted password for $1 from $2 port \d+ ssh2
+desc2=Successful login for user %1 from %2
+action2=shellcmd /sbin/iptables -D INPUT -s %2 -j LOG; \
+        delete L

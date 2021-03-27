@@ -1,0 +1,43 @@
+########## Regular configuration ##########
+
+flush ruleset
+
+table ip firewall {
+
+  chain input {
+    type filter hook input priority 0; policy accept;
+    ct state established,related counter accept
+    meta iifname "lo" counter accept
+    tcp dport 22 ct state new counter accept
+    ip saddr 192.168.56.0/24 tcp dport 80 ct state new counter accept
+    ip saddr 192.168.56.1 udp dport { 123, 514 } ct state new counter accept
+    log prefix "nftables: " counter drop
+  }
+
+}
+
+########## Configuration with rules for filtering bad TCP packets ##########
+
+flush ruleset
+
+table ip firewall {
+
+  chain input {
+    type filter hook input priority 0; policy accept;
+    ip protocol tcp counter jump badtcp
+    ct state established,related counter accept
+    meta iifname "lo" counter accept
+    tcp dport 22 ct state new counter accept
+    ip saddr 192.168.56.0/24 tcp dport 80 ct state new counter accept
+    ip saddr 192.168.56.1 udp dport { 123, 514 } ct state new counter accept
+    log prefix "nftables: " counter drop
+  }
+
+  # drop SYN-FIN and FIN-without-ACK packets
+
+  chain badtcp {
+    tcp flags & (syn|fin) == syn|fin counter drop
+    tcp flags & (ack|fin) == fin counter drop
+  }
+}
+

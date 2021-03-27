@@ -1,0 +1,4 @@
+type=Calendar
+time=0,5,45 3,6-23 * * *
+desc=Flush the BLOCKED chain of the filter table
+action=shellcmd /sbin/iptables -F BLOCKED

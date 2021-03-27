@@ -1,0 +1,138 @@
+##########################################################################
+# Rules for local message processing
+##########################################################################
+
+# debug-level messages go to /var/log/debug.log
+
+*.=debug         action(type="omfile" file="/var/log/debug.log" template="RSYSLOG_FileFormat")
+
+# info..err -level messages (i.e., messages from info below crit-level) 
+# go to /var/log/info-err.log
+
+*.info;*.!crit   action(type="omfile" file="/var/log/info-err.log" template="RSYSLOG_FileFormat")
+
+# messages from crit-level up to the highest level (emerg)
+# go to /var/log/crit-emerg.log
+
+*.crit           action(type="omfile" file="/var/log/crit-emerg.log" template="RSYSLOG_FileFormat")
+
+# note that previous statements can also be written as follows:
+#
+# *.=debug		/var/log/debug.log;RSYSLOG_FileFormat
+# *.info;*.!crit	/var/log/info-err.log;RSYSLOG_FileFormat
+# *.crit		/var/log/crit-emerg.log;RSYSLOG_FileFormat
+#
+
+# send emerg-level messages to all terminals
+*.emerg         :omusrmsg:*
+
+# note that previous statement can also be written as follows:
+# *.emerg         action(type="omusrmsg" users="*")
+
+# the statement below is an old syntax which works with rsyslog 7 and 8,
+# but produces a warning message
+#*.emerg		*
+
+# Apache web server messages
+if $programname == 'apache' then /var/log/apache.log
+
+# send messages with mail or daemon facility and of notice..alert -level 
+# to central log server (i.e., all mail and daemon messages starting from
+# notice, excluding emerg)
+mail,daemon.notice;mail,daemon.!=emerg	@192.168.56.103
+
+# note that previous statement can also be written as follows:
+# mail,daemon.notice;mail,daemon.!=emerg  action(type="omfwd" target="192.168.56.103" protocol="udp" port="514")
+
+##########################################################################
+# Server configuration
+##########################################################################
+
+# accept syslog messages from remote hosts on port 514/udp
+# (incoming messages can be both in BSD or IETF format)
+
+module(load="imudp")
+input(type="imudp" port="514")
+
+##########################################################################
+
+# accept IETF TLS messages from 10514/tcp (the server is also able
+# to process newline separated messages in BSD syslog format)
+
+global(
+  DefaultNetstreamDriver="gtls"
+  DefaultNetstreamDriverCAFile="/usr/local/etc/syslog/ca/cert.pem"
+  DefaultNetstreamDriverCertFile="/usr/local/etc/syslog/ssl/cert.pem"
+  DefaultNetstreamDriverKeyFile="/usr/local/etc/syslog/ssl/key.pem"
+)
+
+# StreamDriver.Name="gtls" option is not mandatory, since default
+# netstream driver has already been set to gtls above, but we have
+# included it here for the sake of clarity
+
+module(
+  load="imtcp"
+  StreamDriver.Name="gtls"
+  StreamDriver.Mode="1"
+  StreamDriver.AuthMode="anon"
+)
+
+input(type="imtcp" port="10514")
+
+# if a separate processing flow needs to be configured for servers
+# at 514/udp and 10514/tcp, one can comment out the directives
+# input(type="imudp" port="514") and input(type="imtcp" port="10514"), 
+# activating the following configuration instead:
+#
+# template (name="hostlog" type="string" string="/var/log/%fromhost-ip%/%$now%.log")
+#
+# template(name="messageformat"
+#          type="string"
+#          string="%timegenerated% %HOSTNAME% %pri-text% %syslogtag% %msg%\n")
+#
+# ruleset(name="network") {
+#   action(type="omfile" dynaFile="hostlog" Template="messageformat")
+# }
+#
+# input(type="imudp" port="514" ruleset="network")
+# input(type="imtcp" port="10514" ruleset="network")
+
+##########################################################################
+# Client configuration
+##########################################################################
+
+# Note that entire rsyslog configuration can contain only one global()
+# object. Therefore, if the same rsyslog process is acting both as
+# a client and server and is sending messages to itself, the following 
+# definition needs to be commented out (there already is one global()
+# object that has been defined above for the server). Note that if
+# rsyslog acts both as a client and server, one needs to bind a ruleset
+# to server port, in order to avoid message loops!
+
+global(
+  DefaultNetstreamDriver="gtls"
+  DefaultNetstreamDriverCAFile="/usr/local/etc/syslog/ca/cert.pem"
+)
+
+# Send daemon messages to server 192.168.56.103 port 10514/tcp, using IETF
+# syslog protocol over TLS. Authenticate the server - check the validity of 
+# the certificate and the server name in the certificate (* matches all 
+# single-part server names without dots, but you can also use specific names 
+# like some.test.mydomain). Also, force the use of encryption by setting
+# stream driver mode to 1.
+# StreamDriver="gtls" option is not mandatory, since default netstream 
+# driver has already been set to gtls above, but we have included it here 
+# for the sake of clarity.
+
+daemon.*   action(type="omfwd" target="192.168.56.103" port="10514"
+                  protocol="tcp" template="RSYSLOG_SyslogProtocol23Format"
+                  TCP_Framing="octet-counted"
+                  StreamDriver="gtls" StreamDriverMode="1" 
+                  StreamDriverAuthMode="x509/name"
+                  StreamDriverPermittedPeers="*")  
+
+# send daemon messages in IETF syslog format to server 192.168.56.1 
+# port 8514/udp
+
+daemon.*   action(type="omfwd" target="192.168.56.1" port="8514"
+                  protocol="udp" template="RSYSLOG_SyslogProtocol23Format")

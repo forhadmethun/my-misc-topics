@@ -1,0 +1,31 @@
+# Oct  2 13:37:45 ristov sshd[23044]: Failed password for risto from 10.6.27.6 port 48030 ssh2
+# Oct  2 13:38:24 ristov sshd[23049]: Accepted password for risto from 10.6.27.6 port 54385 ssh2
+
+type=PairWithWindow
+ptype=RegExp
+pattern=sshd\[\d+\]: Failed .+ for (?:invalid user )?(\S+)\
+ from [\d.]+ port \d+ ssh2
+desc=SSH login failed for $1
+action=event SSH_LOGIN_FAILED_FOR_$1
+ptype2=RegExp
+pattern2=sshd\[\d+\]: Accepted .+ for $1 from [\d.]+ port \d+ ssh2
+desc2=SSH login successful for %1
+action2=logonly
+window=30
+
+type=SingleWithThreshold
+ptype=RegExp
+pattern=SSH_LOGIN_FAILED_FOR_(\S+)
+context=!USERNAME_$1_COUNTED && !COUNTING_OFF
+continue=TakeNext
+desc=Ten login failures for distinct usernames
+action=pipe '%s' mail -s 'username probes' root; create COUNTING_OFF 3600
+window=600
+thresh=10
+
+type=Single
+ptype=RegExp
+pattern=SSH_LOGIN_FAILED_FOR_(\S+)
+context=!USERNAME_$1_COUNTED && !COUNTING_OFF
+desc=Set up the "count once" context for username $1
+action=create USERNAME_$1_COUNTED 600

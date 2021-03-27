@@ -1,0 +1,16 @@
+# iptables -A INPUT -j LOG --log-prefix 'iptables: '
+# iptables -A INPUT -j DROP
+#
+# Sep 24 19:08:06 ristov kernel: iptables: IN=eth0 OUT= MAC=00:13:72:8a:83:d2:00:1b:25:07:e2:1b:08:00 SRC=10.2.41.14 DST=10.12.5.5 LEN=60 TOS=0x00 PREC=0x00 TTL=62 ID=1881 DF PROTO=TCP SPT=34342 DPT=23 WINDOW=5840 RES=0x00 SYN URGP=0
+# Sep 29 19:31:26 ristov sshd[18644]: Failed password for invalid user ristov from 10.2.41.14 port 52570 ssh2
+
+type=PairWithWindow
+ptype=RegExp
+pattern=kernel: iptables:.* SRC=([\d.]+) .* PROTO=TCP .* DPT=23\b
+desc=Blocked TELNET access from IP $1
+action=pipe '%s' mail root@localhost
+ptype2=RegExp
+pattern2=sshd\[\d+\]: Accepted (.+) for (\S+) from $1 port \d+ ssh2
+desc2=TELNET access from IP %1 followed by $1 login for user $2
+action2=pipe '%s' logger -p authpriv.info -t sec
+window=20

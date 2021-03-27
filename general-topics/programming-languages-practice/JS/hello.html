@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JavaScript</title>
+	<!-- external from file system -->
+	<script src="hello.js"></script>
+	<!-- external from cdn -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+
+	<!-- inner text change to time -->
+<button type="button" onclick="document.getElementById('demo1').innerHTML = Date()">Press Me baby to see present time!!!</button>
+<p id="demo1">Time will be shown here ... if upper button pressed</p>
+
+<!-- inner text change -->
+<button type="button" onclick='document.getElementById("demo2").innerHTML = "Hello JavaScript!"'>Click Me </button>
+<p id="demo2">I will be changed when button clicked </p>
+
+<!-- image change -->
+<button onclick="document.getElementById('myImage').src = 'pic_bulboff.gif'">Turn Off Light</button>
+<button onclick="document.getElementById('myImage').src = 'pic_button.gif'">Turn on Light</button>
+<img src='pic_bulboff.gif' id="myImage">
+
+
+<br/>
+<!-- inner text manipulation -->
+<button type="button" onclick="document.getElementById('demo3').style.fontSize = '35px'"> Click Me to change font size </button>
+
+<p id = "demo3">My Size Will be chaged if the upper button pressed</p>
+
+
+<!-- hide any element -->
+<button type="button" onclick="document.getElementById('demo4').style.display='none'"> Click Me to hide</button>
+<p id = "demo4">I will be deleted from the earth if the upper button pressed</p>
+
+
+<!-- show and hidden element -->
+<button type="button" onclick="document.getElementById('demo5').style.display='block'">Press to see what is waiting for you..!!!</button>
+<p id="demo5" style="display:none">Boooooooooooooooo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
+
+
+<!-- JavaScript Display Possibilities -->
+<!-- innerHTML, document.write(), window.alert(), console.log() -->
+
+<!-- document.write() --><br/>
+<script>document.write("i am from document write");</script>
+
+
+<!-- i am from onclick and document. write --><br/>
+<button type="button" onclick="document.write('everything deleted :( ')"> Dont Press !!! I will delete everything!!</button>
+
+<!-- i am from window.alert -->
+<script>
+	// window.alert('Hello from Alert!!!');
+</script>
+
+<!-- i will be printed on console -->
+<script>
+	console.log("I am in console...!!");
+</script>
+
+<!-- JS statements --><br/>
+<p>The following line is set from js-</p>
+<p id='demo8'></p>
+<script>var x,y,z; x = 5 ; y = 6; z = x + y; document.getElementById('demo8').innerHTML = z;</script>
+<!-- JS code order matters!!!! -->
+
+<!-- array of objects -->
+<script>
+	var cars = [
+		{type:"Volvo", year:2016},
+		{type:"Saab", year:2001},
+		{type:"BMW", year:2010}
+	];
+</script>
+
+<!-- form validate --><br/>
+<form name="myForm" action="/action_page.php"
+onsubmit="return validateForm()" method="post">
+Name: <input type="text" name="fname">
+<input type="submit" value="Submit">
+<script>
+	function validateForm() {
+    var x = document.forms["myForm"]["fname"].value;
+    if (x == "") {
+        alert("Name must be filled out");
+        return false;
+    }
+}
+
+// getting value of a variable
+x = document.getElementById("numb").value;
+
+</script>
+<!-- html default required field -->
+<input type="text" name="fname" required>
+
+<!-- loop -->
+<p id="demo10"></p>
+<script>
+		var txt = "";
+		var person = {fname:"John", lname:"Doe", age:25}; 
+		var x;
+		for (x in person) {
+			txt += person[x] + " ";
+			document.write("name: " + x + "<br/>");
+			document.write("value:" + " " + person[x] + "<br/><br/>");
+		}
+		document.getElementById("demo10").innerHTML = txt;
+</script>
+
+
+<!-- function inside object -->
+<p id="demo11"></p>
+<script>
+		var person = {
+			firstName: "John",
+			lastName : "Doe",
+			id       : 5566,
+			fullName : function(hoga) {
+			   return this.firstName + " " + this.lastName + " " + hoga;
+			}
+		};
+		document.getElementById("demo11").innerHTML = person.fullName("billaal");
+</script>
+
+<!-- adding function to an object -->
+<p id="demo12"></p>
+<script>
+		var person = {
+			firstName: "John",
+			lastName : "Doe",
+			id       : 5566,
+		};
+		person.name = function() {
+			return this.firstName + " " + this.lastName;
+		};
+		
+		document.getElementById("demo12").innerHTML =
+		"My father is " + person.name(); 
+		</script>
+
+<!-- constructor -->
+<p id="demo13"></p>
+
+<script>
+
+// Constructor function for Person objects
+function Person(first, last, age, eye) {
+    this.firstName = first;
+    this.lastName = last;
+    this.age = age;
+    this.eyeColor = eye;
+}
+
+// Create a Person object
+var myFather = new Person("John", "Doe", 50, "blue");
+
+// Display age
+document.getElementById("demo13").innerHTML =
+"My father is " + myFather.age + "."; 
+
+</script>
+
+
+<!-- JS closures -->
+<script>
+	var add = (function () {
+    var counter = 0;
+    return function () {return counter += 1;}
+})();
+
+add();
+add();
+add();
+//This is called a JavaScript closure. It makes it possible for a function to have "private" variables.
+// the counter is now 3
+</script>
+
+<!-- DOM
+
+it is object model and programming interface, 
+- element as object
+- properties of all html elements
+- methods to access all html elements
+- events for all html elements
+
+=> standard for how to get, change, add or delete html elements
+
+DOM - methods => actions performed  on html elements
+DOM - properties => value that can set or change
+document.getElementById("demo").innerHTML = "Hello World!";
+getElementById -> method
+innerHTML -> property
+
+Finding HTML elements  -
+	document.getElementById(id)
+	document.getElementsByTagName(name)  // return array of all elemnts with the tag
+	document.getElementsByClassName(name) // also return an array
+
+	var x = document.querySelectorAll("p.intro"); // return <p> elements with class "intro"
+
+Changing HTML Elements - 
+	element.innerHTML - new html content
+	element.attribute - new value
+	element.setAttribute(attribute, value)
+	element.style.property = new style
+
+Adding or deleting Elements- 
+	document.createElement(element)
+	document.removeChild(element)
+	document.appendChild(element)
+	document.replaceChild(element)
+	document.write(text)
+
+Adding Event Handlers
+	document.getElementById(id).onclick = function(){//somecode}
+
+
+
+<p id="myBtn">Try it</p>
+	document.getElementById("myBtn").addEventListener("click", displayDate);
+
+-->
+
+
+
+<!-- creating new element by DOM -->
+<div id="div1">
+	<p id="p1">This is a paragraph.</p>
+	<p id="p2">This is another paragraph.</p>
+	</div>
+	
+	<script>
+	var para = document.createElement("p");
+	var node = document.createTextNode("This is new.");
+	para.appendChild(node);
+	
+	var element = document.getElementById("div1");
+	var child = document.getElementById("p1");
+	element.insertBefore(para,child);
+	</script>
+
+
+<!-- redirect to new page -->
+
+<script>
+	function newDoc() {
+		window.location.assign("https://www.w3schools.com")
+	}
+	</script>
+
+	<!-- cookie -->
+	<!-- 
+		Cookies are data, stored in small text files, on your computer.
+		When a web server has sent a web page to a browser, the connection is shut down, and the server forgets everything about the user.
+	 -->
+	<!-- 
+
+		cookie can be created, read,  changed, deleted by JS
+	 -->
+
+
+
+
+	 <!-- AJAX -->
+	 <!-- 
+
+		AJAX is a developer's dream, because you can:
+
+Read data from a web server - after the page has loaded
+Update a web page without reloading the page
+Send data to a web server - in the background
+	  -->
+
+
+
+
+<!-- Already Known Topics -->
+<!-- 
+Syntax
+Comments
+Variables
+
+ -->
+
+
+ <!-- some basic topics -->
+ <script>
+	 var x = "5" + 2 + 3 ; 
+	 //output is 523 , if a number string then whole string but if 2 + 3 + "5" then it will print 55 actually it works from left to right
+	//  "2" > "12"	true
+	 var charName = "bugetti";
+	 var charName;
+	 //now printing charName is "bugettin" for javascript
+	 var notAssigned; // it will print undefined; 
+
+	 //	**	Exponentiation
+	//  	>>>	Shift right (unsigned)
+	// ===	Strict equal
+	// 
+ </script>
+
+
+<!-- script can be written within script tag --><br/>
+<p id="demo6"></p>
+<p id ="demo7" onclick="changeText()">I will be change when clicked by me..</p>
+
+
+
+</body>
+<script>
+	// Scripts can be placed in the <body>, or in the <head> section of an HTML page, or in both.
+	// You can place any number of scripts in an HTML document.
+
+	document.getElementById('demo6').innerHTML = "hello from script tag"; 
+	function changeText(){
+		document.getElementById('demo7').innerHTML = ' I am changed :( by clicking '; 
+	}
+</script>
+</html>

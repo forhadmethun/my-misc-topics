@@ -1,0 +1,40 @@
+# iptables -A INPUT -j LOG --log-prefix 'iptables: '
+# iptables -A INPUT -j DROP
+#
+# Sep 24 19:08:06 ristov kernel: iptables: IN=eth0 OUT= MAC=00:13:72:8a:83:d2:00:1b:25:07:e2:1b:08:00 SRC=10.2.41.14 DST=10.12.5.5 LEN=60 TOS=0x00 PREC=0x00 TTL=62 ID=1881 DF PROTO=TCP SPT=34342 DPT=23 WINDOW=5840 RES=0x00 SYN URGP=0
+# Sep 29 19:31:26 ristov sshd[18644]: Failed password for risto from 10.2.41.14 port 52570 ssh2
+
+type=Single
+ptype=RegExp
+pattern=kernel: iptables:.* SRC=([\d.]+)
+desc=Port probing from source $1
+action=create PORT_PROBE_$1 3600
+
+type=Single
+ptype=RegExp
+pattern=sshd\[\d+\]: Failed .+ for (\S+) from [\d.]+ port \d+ ssh2
+desc=Failed login attempt for $1
+action=create LOGIN_FAILURE_$1 3600
+
+type=Single
+ptype=RegExp
+pattern=sshd\[(\d+)\]: Accepted .+ for (\S+) from ([\d.]+) port \d+ ssh2
+context=PORT_PROBE_$3 || LOGIN_FAILURE_$2
+desc=Create a context for recording the session
+action=create SSH_SESSION_$1 300 \
+         (report SSH_SESSION_$1 /bin/mail -s 'sshd[$1]' root); \
+       add SSH_SESSION_$1 $0
+
+type=Single
+ptype=RegExp
+pattern=sshd\[(\d+)\]:
+continue=TakeNext
+context=SSH_SESSION_$1
+desc=Record an event from sshd process $1
+action=add SSH_SESSION_$1 $0
+
+type=Single
+ptype=RegExp
+pattern=sshd\[(\d+)\]:.*session closed for user \S+
+context=SSH_SESSION_$1
+desc=Report the session of sshd process $1

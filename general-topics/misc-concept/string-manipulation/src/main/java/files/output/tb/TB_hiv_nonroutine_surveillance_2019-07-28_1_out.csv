@@ -1,0 +1,85 @@
+"country","iso2","iso3","iso_numeric","g_whoregion","year","tbhiv_surv_prev","tbhiv_surv_yr","tbhiv_surv_cil","tbhiv_surv_ciu","tbhiv_sentin_prev","tbhiv_sentin_yr","tbhiv_sentin_cil","tbhiv_sentin_ciu"
+"Benin","BJ","BEN","204","AFR",2008,,,,,17,2008,,
+"Benin","BJ","BEN","204","AFR",2009,,,,,16,2009,15,17
+"Benin","BJ","BEN","204","AFR",2010,,,,,16,2010,15,16
+"Cambodia","KH","KHM","116","WPR",2007,0.08,2007,,,,,,
+"Cambodia","KH","KHM","116","WPR",2009,6.4,2009,,,24,,,
+"Cambodia","KH","KHM","116","WPR",2010,6.3,2009,,,,,,
+"Cameroon","CM","CMR","120","AFR",2009,35,2008,,,,,,
+"Cameroon","CM","CMR","120","AFR",2010,35,2008,,,,,,
+"China","CN","CHN","156","WPR",2007,,2007,,,,,,
+"China","CN","CHN","156","WPR",2012,,,,,0.75,2012,0.73,0.77
+"Democratic Republic of the Congo","CD","COD","180","AFR",2007,8.6,2007,,,,,,
+"Democratic Republic of the Congo","CD","COD","180","AFR",2008,,,,,8,2008,,
+"Denmark","DK","DNK","208","EUR",2008,0.1,2009,,,,,,
+"Denmark","DK","DNK","208","EUR",2009,4,2009,2,8,,,,
+"Denmark","DK","DNK","208","EUR",2010,3,2009,,,,,,
+"Denmark","DK","DNK","208","EUR",2012,3,2011,,,,2013,,
+"Ethiopia","ET","ETH","231","AFR",2011,,,,,17.3,2011,16.5,18.1
+"Ethiopia","ET","ETH","231","AFR",2013,,,,,17.9,2012,,
+"Ethiopia","ET","ETH","231","AFR",2014,,,,,17.2,2013,,
+"Ethiopia","ET","ETH","231","AFR",2015,,,,,17.6,2015,,
+"France","FR","FRA","250","EUR",2009,,2008,,,,,,
+"France","FR","FRA","250","EUR",2010,,,,,8.2,2010,6.9,9.7
+"France","FR","FRA","250","EUR",2011,,,,,7.3,2011,6.1,8.6
+"France","FR","FRA","250","EUR",2012,,,,,7.3,2011,6.1,8.6
+"France","FR","FRA","250","EUR",2013,7.3,2012,6.1,8.7,,,,
+"France","FR","FRA","250","EUR",2014,,,,,5.8,2013,4.8,7.1
+"France","FR","FRA","250","EUR",2015,,,,,6.04,2014,4.9,7.2
+"France","FR","FRA","250","EUR",2016,,,,,6.74,2015,5.53,8.11
+"France","FR","FRA","250","EUR",2017,,,,,5.67,,4.61,6.89
+"Guatemala","GT","GTM","320","AMR",2008,,,,,19,2007,15.3,23.4
+"India","IN","IND","356","SEA",2007,7,2007,,,,,,
+"Indonesia","ID","IDN","360","SEA",2017,2.41,2017,1.27,4.53,,,,
+"Israel","IL","ISR","376","EUR",2010,3.8,2010,3.61,4,0,,0,0
+"Kenya","KE","KEN","404","AFR",2008,45,2008,42,48,0,2008,0,0
+"Kenya","KE","KEN","404","AFR",2009,44,2009,42,46,0,2009,0,0
+"Kenya","KE","KEN","404","AFR",2010,41,2010,37,45,,,,
+"Madagascar","MG","MDG","450","AFR",2011,,,,,1.68,2011,,
+"Madagascar","MG","MDG","450","AFR",2012,,,,,0,2010,0,1
+"Madagascar","MG","MDG","450","AFR",2013,,,,,2.34,2013,,
+"Madagascar","MG","MDG","450","AFR",2014,,,,,2.34,2013,,
+"Morocco","MA","MAR","504","EMR",2007,,,,,0.49,2007,,
+"Morocco","MA","MAR","504","EMR",2009,1.7,2008,1.1,2.6,0.39,2008,,
+"Morocco","MA","MAR","504","EMR",2010,1.7,2008,1.1,2.6,0.85,2010,,
+"Morocco","MA","MAR","504","EMR",2012,,,,,0.64,2012,0.62,0.66
+"Mozambique","MZ","MOZ","508","AFR",2013,,,,,56,2013,,
+"Myanmar","MM","MMR","104","SEA",2007,,,,,10.9,2006,,
+"Myanmar","MM","MMR","104","SEA",2008,,,,,11,2008,,
+"Myanmar","MM","MMR","104","SEA",2009,,,,,11,2008,,
+"Myanmar","MM","MMR","104","SEA",2010,10.4,2010,,,10.4,2010,,
+"Myanmar","MM","MMR","104","SEA",2011,9.9,2011,8.8,11,9.9,2011,8.8,11
+"Myanmar","MM","MMR","104","SEA",2012,0,2012,0,0,9.7,2012,8.7,10.7
+"Myanmar","MM","MMR","104","SEA",2013,,2013,,,9.2,2013,8.2,10.2
+"Myanmar","MM","MMR","104","SEA",2016,,,,,8.4,2016,,
+"Namibia","NA","NAM","516","AFR",2008,59,2008,,,17.8,2008,,
+"Namibia","NA","NAM","516","AFR",2009,58,2009,50,70,34,2009,34,34
+"Namibia","NA","NAM","516","AFR",2010,55,2010,53.82,55.82,,2010,,
+"Pakistan","PK","PAK","586","EMR",2010,,,,,0.3,2010,,
+"Pakistan","PK","PAK","586","EMR",2015,,,,,0.5,2015,,
+"Pakistan","PK","PAK","586","EMR",2016,,,,,0.54,2016,,
+"Pakistan","PK","PAK","586","EMR",2017,,,,,0.46,2017,,
+"Papua New Guinea","PG","PNG","598","WPR",2008,,,,,3.8,2008,,
+"Portugal","PT","PRT","620","EUR",2008,14.6,2008,13.38,15.94,,,,
+"Portugal","PT","PRT","620","EUR",2010,12,2010,10,13,,,,
+"Russian Federation","RU","RUS","643","EUR",2008,6,2008,1,3,,,,
+"Russian Federation","RU","RUS","643","EUR",2009,8,2009,7,9,,,,
+"Sierra Leone","SL","SLE","694","AFR",2007,10.9,2005,,,,,,
+"Sierra Leone","SL","SLE","694","AFR",2008,10.9,2005,,,,,,
+"Syrian Arab Republic","SY","SYR","760","EMR",2007,,,,,0,2007,,
+"Syrian Arab Republic","SY","SYR","760","EMR",2008,0,,,,,,,
+"Tajikistan","TJ","TJK","762","EUR",2008,4,2008,13,18,,,,
+"Thailand","TH","THA","764","SEA",2007,17,2006,,,,,,
+"Thailand","TH","THA","764","SEA",2008,17,2007,,,,,,
+"Thailand","TH","THA","764","SEA",2009,17,2007,,,,,,
+"Togo","TG","TGO","768","AFR",2008,32,2008,,,,,,
+"Togo","TG","TGO","768","AFR",2009,25,2009,,,0,,,
+"Togo","TG","TGO","768","AFR",2010,25,2010,,,,,,
+"Tonga","TO","TON","776","WPR",2009,0,2009,0,0,0,2009,0,0
+"Tonga","TO","TON","776","WPR",2010,0,2010,0,0,0,2010,0,0
+"United Republic of Tanzania","TZ","TZA","834","AFR",2008,47,2008,,,,,,
+"United Republic of Tanzania","TZ","TZA","834","AFR",2009,47,2007,,,,,,
+"Viet Nam","VN","VNM","704","WPR",2007,,,,,4.4,2007,,
+"Viet Nam","VN","VNM","704","WPR",2008,,,,,3.75,2008,,
+"Zambia","ZM","ZMB","894","AFR",2009,0,2010,,,78,2010,,
+"Zimbabwe","ZW","ZWE","716","AFR",2007,0,,,,0,,,

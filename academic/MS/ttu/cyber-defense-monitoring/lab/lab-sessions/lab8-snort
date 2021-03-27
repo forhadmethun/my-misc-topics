@@ -1,0 +1,26 @@
+drop tcp $EXTERNAL_NET any -> $HTTP_SERVERS $HTTP_PORTS (msg:"HTTP request for CGI with param list"; uricontent:".cgi?"; classtype:web-application-attack; sid:4000013; rev:1;)
+
+####################
+
+alert tcp $EXTERNAL_NET any -> $HTTP_SERVERS $HTTP_PORTS (msg:"HTTP request for .html file with a long browser string"; pcre:"/\.html$/U"; content:"|0d 0a|User-Agent: "; isdataat:502,relative; content:!"|0d 0a|"; within:502; classtype:web-application-attack; sid:4000014; rev:1;)
+
+# an alternative solution to the previous problem -- the H modifier will
+# restrict pcre match option to HTTP headers. Since User-Agent might be
+# the first header field, we need (?:^|\x0d\x0a) atom for matching data
+# before "User-Agent: ". Note that for narrowing the content option to
+# HTTP headers, http_header modifier can be used.
+
+alert tcp $EXTERNAL_NET any -> $HTTP_SERVERS $HTTP_PORTS (msg:"  with a long browser string"; pcre:"/\.html$/U"; pcre:"/(?:^|\x0d\x0a)User-Agent: ((?!\x0d\x0a).){501}/H"; classtype:web-application-attack; sid:4000015; rev:1;)
+
+####################
+
+drop tcp $EXTERNAL_NET any -> $HTTP_SERVERS $HTTP_PORTS (msg:"HTTP request for form.pl with long id"; uricontent:"form.pl"; pcre:"/\/form\.pl\?(?:.*?&)?id=[^&]{10}/U"; classtype:web-application-attack; sid:4000016; rev:1;)
+
+# above solution does not prevent evasions where %26 is submitted within 'id'
+# parameter value -- http preprocessor will convert it to & and the signature
+# will mistakenly consider it as a separator between parameters. 
+# For a solution, one can use pcre I-modifier for checking the URL *before* 
+# it was normalized.
+
+drop tcp $EXTERNAL_NET any -> $HTTP_SERVERS $HT TP_PORTS (msg:"HTTP request for form.pl with id evasion"; uricontent:"form.pl"; pcre:"/\/form\.pl\?(?:.*?&)?id=[^&]*?%26/I"; classtype:web-application-attack; sid:4000017; rev:1;)
+

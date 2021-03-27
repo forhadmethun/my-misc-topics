@@ -1,0 +1,54 @@
+@version:3.27
+
+# ---------- Task 4 ----------
+
+options { keep_hostname(yes); };
+
+# receive BSD syslog over UDP
+
+source bsdsyslog_udp { network(transport(udp) port(514)); };
+
+# receive BSD syslog over TCP: max 200 TCP connections 
+# (for each connection, flow control window size is calculated as
+# log_iw_size/max-connections, and the result has to be >= 100)
+
+source bsdsyslog_tcp { 
+  network(transport(tcp) port(1514) max-connections(200) log_iw_size(20000)); 
+};
+
+# save messages with local reception time, facility and level
+template with_facility_and_level { 
+  template("$R_DATE $HOST [$FACILITY.$LEVEL] $MSGHDR$MSG\n"); 
+};
+
+# log_fifo_size must be larger than (total number of connections from all sources) * max log_fetch_limit 
+destination bsdnetlog { file("/var/log/$SOURCEIP/netlog.log" 
+  template(with_facility_and_level) log_fifo_size(200000) create_dirs(yes)); };
+
+log { source(bsdsyslog_udp); source(bsdsyslog_tcp); destination(bsdnetlog); };
+
+# ---------- Task 5 ----------
+
+source ietfsyslog_udp { syslog(ip(0.0.0.0) port(8514) transport(udp)); };
+
+source ietfsyslog_tls { syslog(ip(0.0.0.0) port (6514) transport(tls)
+  max-connections(100)
+  log_iw_size(10000)
+  tls(
+    peer_verify(optional-untrusted)
+    key_file("/usr/local/etc/syslog/ssl/key.pem")
+    cert_file("/usr/local/etc/syslog/ssl/cert.pem")
+  ));
+};
+
+# save messages with local reception time, facility, level
+# and structured data as a single string at the end of the message
+template with_structured_data { 
+  template("$R_DATE $HOST [$FACILITY.$LEVEL] $MSGHDR$MSG ($SDATA)\n"); 
+};
+
+destination ietfnetlog { file("/var/log/ietfmsg.log" 
+  template(with_structured_data) log_fifo_size(100000)); 
+};
+
+log { source(ietfsyslog_udp); source(ietfsyslog_tls); destination(ietfnetlog); };

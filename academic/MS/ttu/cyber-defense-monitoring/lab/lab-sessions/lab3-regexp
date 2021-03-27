@@ -1,0 +1,70 @@
+# Match the log messages from sshd and crond that are user space processes
+# with PID numbers, and the kernel
+# (Please note that if a another []-construct is used inside brackets [ ], 
+# outer brackets might not need escaping with some regular expression engines. 
+# In other words [[0-9]+] might also match "[PID]". However, for the sake
+# of portability it is not recommended to leave outer brackets unescaped.)
+
+# without timestamp verification
+((sshd|crond)\[[0-9]+\]|kernel):
+
+# with timestamp verification
+^[A-Z][a-z]{2} [0-9 ][0-9] ([0-9]{2}:){2}[0-9]{2} [A-Za-z0-9.-]+ ((sshd|crond)\[[0-9]+\]|kernel):
+
+# check the correctness of short hostname (with |)
+^([A-Za-z]|[A-Za-z][A-Za-z0-9-]*[A-Za-z0-9])$
+
+# check the correctness of long hostname (with |)
+^([A-Za-z]|[A-Za-z][A-Za-z0-9-]*[A-Za-z0-9])(\.([A-Za-z]|[A-Za-z][A-Za-z0-9-]*[A-Za-z0-9]))*$
+
+# check the correctness of short hostname (without |)
+^[A-Za-z]([A-Za-z0-9-]*[A-Za-z0-9])?$
+
+# check the correctness of long hostname (without |)
+^[A-Za-z]([A-Za-z0-9-]*[A-Za-z0-9])?(\.[A-Za-z]([A-Za-z0-9-]*[A-Za-z0-9])?)*$
+
+# rsyslog filters -- the filters have to be installed into a .conf file in
+# the /etc/rsyslog.d directory (for example, /etc/rsyslog.d/browser.conf).
+# After the .conf file has been set up, don't forget to restart rsyslog.
+# In order to match " inside regular expression, it has to be masked with \
+# in order to mask special symbols, \\ has to be used instead of \
+
+# MS Internet Explorer (version 10 and earlier)
+:msg, ereregex, "Mozilla/[0-9.]+ .* MSIE [0-9.]+"   /var/log/explorer.log
+
+# Internet Explorer 11 uses a User-Agent string which no longer contains 
+# "MSIE", but rather looks like:
+# Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko
+#
+:msg, ereregex, "Mozilla/[0-9.]+ \\(Windows NT .* Trident/7\\.0;.* rv:11\\.0"   /var/log/explorer11.log
+
+# Edge
+# note that Edge messages contain "Chrome/version_number" substring:
+# Oct  3 20:44:41 myhost apache: 192.168.16.10 - - [03/Oct/2019:20:44:41 +0300] "GET /noindex/css/fonts/Light/OpenSans-Light.ttf HTTP/1.1" 404 240 "http://192.168.16.58/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/18.17763"
+
+:msg, ereregex, "Mozilla/[0-9.]+ .* Edge/[0-9.]+"   /var/log/edge.log
+
+# Chrome
+# (in order to avoid matching Edge messages, verify that user agent string
+# ends after "Safari/version_number")
+
+:msg, ereregex, "Mozilla/[0-9.]+ .* Chrome/[0-9.]+ Safari/[0-9.]+\"$"   /var/log/chrome.log
+
+# Firefox
+:msg, ereregex, "Mozilla/[0-9.]+ .* Firefox/[0-9.]+"   /var/log/firefox.log
+
+# Lynx
+:msg, ereregex, "Lynx/[0-9.]+(rel|dev|pre)\\.[0-9]+"   /var/log/lynx.log
+
+# Curl
+:msg, ereregex, "curl/[0-9.]+"   /var/log/curl.log
+
+# Wget -- simple
+:msg, ereregex, "Wget/[0-9.]+"   /var/log/wget.log
+
+# Wget -- advanced
+# rsyslog configuration parser converts the regular expression as follows:
+# \"Wget/[0-9.]+ \\(linux-gnu\\)\"$   ->   "Wget/[0-9.]+ \(linux-gnu\)"$
+
+:msg, ereregex, "\"Wget/[0-9.]+ \\(linux-gnu\\)\"$"   /var/log/wget.log
+
