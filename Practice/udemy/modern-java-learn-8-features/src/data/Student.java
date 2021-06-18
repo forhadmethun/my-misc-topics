@@ -16,8 +16,9 @@ public class Student {
         return bike;
     }
 
-    public void setBike(Optional<Bike> bike) {
+    public Student setBike(Optional<Bike> bike) {
         this.bike = bike;
+        return this;
     }
 
     public Student(){
