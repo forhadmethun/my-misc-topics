@@ -1,10 +1,10 @@
 # Basic Docker
- - way to package softwares so that it can run any hardware
+ - way to package software so that it can run any hardware
  - we can reproduce the environment
  - any developer can rebuild same environment by given docker file which is image that can be uploaded cloud and shared
  - give same environment
  - sandbox project
- - it just works with all necessary softwares
+ - it just works with all necessary software
  - Virtual Machine vs Docker
    - VirtualMachine
      - has own OS, kernel rather than existing own machine
@@ -74,6 +74,7 @@ ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 systemctl unmask docker.service
 systemctl unmask docker.socket
 docker ps
+docker ps --all
 docker images
 docker --version
 mkdir /home/docker_compose01
@@ -132,3 +133,66 @@ docker run -d -it --name nginx-test-bind --mount type=bind,source=/opt/nginx/htm
     - the tool is called **Compose**
     - create composer file with necessary infos
       - `docker compose up`
+      
+
+### How docker works?
+ - Image's file system snapshot are taken into the container and also image contains command's that the image can execute, so once the program command executed then container is processing that command  
+
+### Docker run a program
+```
+docker run <program-name>
+# docker run = creating container + running container
+```
+
+### Docker run program's command
+``` 
+docker run <program-name> <command-name
+
+docker run busybox echo hi there
+docker run busybox ls
+```
+
+### Docker create & run container
+``` 
+# docker run = creating container + running container
+
+docker create hello-world
+docker start -a <container-id> # -a means, give me any output from the container and print to console
+docker logs <container-id>
+```
+
+### Commands
+
+``` 
+docker ps --all # show all processes including existed
+docker system prune # delete everything
+docker logs <container-id>
+docker stop <container-id> # hardware   signal, SIGTERM, nicely save or do some other stuffre
+docker kill <container-id> # SIGKILL -> hardcore signal to stop immediately
+```
+
+### How to initiate multiple program inside container? 
+- scenario running docker run redis will run redis inside container, but redis-cli won't be able to connect as it's in client machine, so how it can access? how to execute that comman inside the container
+
+- `docker exec -it <container-id> <command>` # exec: execute another program
+``` 
+docker exec -it <container-id> redis-cli
+```
+
+### How the -it works? what would happen if we forget it? 
+- Every container is running inside a linux vm
+- Every container has three channel to communicate with the out world
+  - stdin
+    - -it, -i -t(does some prettify), input of the container from terminal
+  - stdout
+  - stderr
+
+### Get terminal access easily
+```  
+docker exec -it <container-id> sh
+docker run -it busybox sh # ctrl + D to exit or exit
+```
+### Creating docker file 
+- Specify base image
+- Run some commands to install additional programs
+- specify commands on container startup
