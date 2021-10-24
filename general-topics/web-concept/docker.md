@@ -196,3 +196,41 @@ docker run -it busybox sh # ctrl + D to exit or exit
 - Specify base image
 - Run some commands to install additional programs
 - specify commands on container startup
+
+### Docker file
+Instruction telling what docker server to do : FROM, RUN, CMD
+Argument to the instruction: alpine, apk add--update redis, ["redis-server"]
+
+Writing docker file === Given a computer without OS and asked to install chrome 
+
+``` 
+FROM alpine
+RUN apk add --update redis
+CMD ["redis-server"]
+```
+### Image creation from container
+docker run -it alpine sh
+apk add --update redis
+
+docker ps
+docker commit -c 'CMD["redis-server"]' <container-id>
+
+### Run a project
+> Dockerfile
+```
+FROM node:alpine
+WORKDIR /usr/app
+COPY ./ ./
+RUN npm install
+CMD ["npm", "start"]
+```
+> npm build .
+> docker run -p 5000:8080 <container-id>
+
+
+
+
+
+
+
+
