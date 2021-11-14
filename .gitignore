@@ -5,3 +5,5 @@
 .DS_Store
 gradle/wrapper/gradle-wrapper.jar
 gradle/wrapper/gradle-wrapper.properties
+/learning/scala/scala-first/build.sbt
+/learning/scala/scala-first/project/build.properties

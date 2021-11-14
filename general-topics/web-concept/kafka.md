@@ -1,0 +1,197 @@
+# Apache Kafka
+## Introduction
+## Motivation
+- event-driven arch
+- existing system focused on state, we consider data as thing ! 
+  - Now it is shifted as event
+  - eg: tweets are events
+- Needs for:
+  - Date infrastructure to manage events in `single platform`
+  - `real-time` stream of events
+  - all events `stored` in historical view
+- Apache kafka
+  - distributed log which provides real-time distributed log
+  - gathering events and store in logs in scalable, replicated & fault-tolerant way
+  - integration of the logs necessary as other things needs to talk kafka
+  - data is stored stream of events
+  - the processing of stream is different than processing of data in database
+    - stream processor take care of it
+- Usage
+  - almost all big companies, 35% of fortune 500
+  - real time fraud detection
+    - minimize risk
+  - Automotive
+    - real time data cluster for sensor,
+  - Real time e-commerce
+    - real time analysis
+  - Core banking / Financial services
+    - core in payment processing
+  - Health care
+    - IoT devices, microservices
+  - Online gaming
+    - real time events, AI
+  - Govt sector
+  => everything is doable with traditional database system but slower, 
+## Fundamentals
+- mental model of kafka
+  - key elements of kafka
+  - what is kafka
+  - what is topic, partition, segment
+- All things are producing events : Kafka's job is to manage the events
+- Producer:
+  - An application that we write
+  - All source of events uses Producer to write to kafka 
+    - after sending events to kafka get ack
+  - There is support for mainly java, all java language, and also wrapper for all others, have rest proxy and also command-line
+- What made kafka cluster?
+  - made of brokers
+    - think like a data-center with processing
+    - each broker has it's own disk
+    - all brokers act together as a single kafka cluster
+    - In cloud we don't need to think much but there is brokers in the behind
+    - can be: vm, containers, so machine word is suitable
+- Consumer: 
+  - An application that we write, kafka manages the data, but to take the date out we write consumer and to put the data we write producer
+  - Purpose: can be anything, from generating report, analysis, or event work as producer
+  - Polling forever for data
+  - While using ksql you won't see producer/consumer, but these components are always there
+  - Consuming doesn't delete the event/data from log, so multiple consumer can access
+  - Independent consumer can work on independent offset
+  - Pulls messages from 1 ... n topics
+  - Consumer Offset: keep track of last message read, is stored in specific topic
+  - Consumers are grouped into consumer group. That's how scale consumer
+- Zookeper
+  - kafka uses zookeeper to manage : few things that all the brokers need to agree on 
+  - distributed consensus manager
+  - authorization, access control list
+  - management of broker failures
+  - who is topic leader, whenever someone dies what will happen : managed by zoo-keeper
+  - little bit of meta-data, fail-over leader election, access control-list
+- Producer & consumer are decoupled
+  - We can add more producers without letting the consumer know, suppose we have new service for fraud detection, we can add more consumers!
+  - all are independent\
+- Topics
+  - Collection of related messages/events
+  - can be thought as logs, sequence of events
+  - any number of producers can write to a topic, a producer can write multiple topic
+  - many consumer can consume from a topic
+  - no limit of topic
+- Partition
+  - Take a topic partition and divide to some broker
+    - This thing cannot scale, as in the end we have to write the data in some physical machine
+  - Actually partition can be called ordered log, as events are sequential in partition, and the topic is divided into multiple partition
+  - Are divided into segments, those are individual files on disk on the broker
+    - might not need to think while working on kafka, but yeap need to think about partition
+- The Log
+  - while writing it goes in the end
+  - immutable records of things
+  - retention period can be set on kafka
+  - fundamental data structure that kafka is based on
+  - Every partition has it's own offset space
+  - Things inside stream are events
+- Structure of kafka message
+  - everything is mainly key-value pair
+  - Record = headers + key + value + timestamp
+- Brokers:
+  - main purpose is to manage partition
+  - takes event from producer and update the partitions, also take requests from consumers and write them out
+  - It's storage & pub-sub
+  - partitions's are stored in broker's disk
+  - many parition can stay inside a broker
+  - How consumer read from broker? Interesting!! :D 
+  - What would happen if partition stays in one broker? 
+    - no worries kafka replicates
+      - replication factor
+      - leader & follower partition
+
+- Producer writes to partition, partition is divided into multiple brokers, which partition the producer writes to?
+  - Partitioning strategy
+  - no particular ordering if not specified, maybe round-robin, evenly
+  - with key, kafka creates hash, so goes to same partition 
+  - custom partitioning strategy can be written to ovverride existing one
+  
+## How kafka works
+- Development basics
+  - Producer basics
+    - some configuration
+    - declare producer
+    - shutdown behavior
+    - sending data
+  - Consumer basics
+    - Configuration
+    - event handlers
+    - onError handling
+    - subscribe topics
+    - polling data
+      - when you read, you read for-ever for all event-driven arch.
+- Partition leadership 
+  - leaders & followers 
+  - when new messages come to leader, follower sees them and write into their log
+  - What if broker dies? 
+    - one of followers elected as leader by Zoookeeper with no loss of data
+- Retention policy
+  - Events are immutable, if happens then happened already, so cannot be changed
+    - by default 1 week retention 
+    - can be set to infinity 
+    - Segments manage it
+      - when newest records in segment is older than retention period then we can kick that out
+- What happens when send method is called on Producer? 
+  - Date goes via serialization (how to convert into byte) then sent to partitioner 
+  - Partitioner hash the key and decides which partition to write
+  - Producer waits for ack when sending message
+    - Acks 0 (NONE), Acks 1(LEADER), Acks -1(ALL)
+  - Reading from kafka is idempotent
+    - Switching light
+  - Exactly once
+    - works with strong transactions
+    - prevents client from processing duplicate messages
+    - handles failure gracefully
+- Consumer groups
+  - same image deployed in the same container/vm/machine twice/more
+  - adding more consumers, kafka balances load
+- Compacted topic
+  - takes the most recent version of each
+- Security
+  - supports encrption, supports authentication & authorization
+## Integration
+- Kafka connect
+  - I can write own producer consumer application, integrate any system in the world
+    - buts shouldn't be done, as kafka connect does it for us
+  - distributed, fault-tolerant, plugable, declarative data integration framework
+  - Connect runs it own server
+  - Any system (source) -> connect -> kafla topic -> connect -> output system (sink)
+  - Connector might have multiple workers, where each worker serve multiple task, work might be parellelize 
+  - scalability, fault-tolerance
+- Confluent REST Proxy
+  - a wrapper on the kafka connect
+- Data compatibility at scale
+  - might want data like sql way
+  - Schema Registry
+    - make data backward compatible & future-proof
+- AVRO
+- Schema Evolution : changing data format
+- ksqlDB server : stream sql database
+  - stream processing
+- KSQL
+  - select...from..
+  - join..where...
+  - group by...
+- Kafka Stream
+  - filter()
+  - map()
+  - join()
+  - aggregate()
+- Producer/Consumer
+  - subscribe()
+  - poll()
+  - send()
+  - flus()
+## What is confluent
+
+# Kafka Streams
+- fluent java functional API for doing stream processing on data in apache kafka
+  - grouping stream by key, lots of things goes in the back, but that's one liner, grouping is stateful
+    - if we would do that, then a lots of things, 
+  - joining stream and turning into a table and joining another stream to that table
+    - few lines of codes in kafka stream
+- java library supports: filtering, aggregating, grouping, mapping
