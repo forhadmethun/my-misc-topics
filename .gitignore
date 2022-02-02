@@ -7,3 +7,12 @@ gradle/wrapper/gradle-wrapper.jar
 gradle/wrapper/gradle-wrapper.properties
 /learning/scala/scala-first/build.sbt
 /learning/scala/scala-first/project/build.properties
+/.idea/misc.xml
+/.idea/.gitignore
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/git_toolbox_prj.xml
+/.idea/modules.xml
+/.idea/my-misc-topics.iml
+/.idea/codeStyles/Project.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/vcs.xml
