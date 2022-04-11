@@ -16,6 +16,13 @@ gradle/wrapper/gradle-wrapper.properties
 /.idea/codeStyles/Project.xml
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/vcs.xml
+/learning/scala/.idea/.gitignore
+/learning/scala/.idea/codeStyles/codeStyleConfig.xml
+/learning/scala/.idea/misc.xml
+/learning/scala/.idea/modules.xml
+/learning/scala/.idea/codeStyles/Project.xml
+/learning/scala/.idea/scala.iml
+/learning/scala/.idea/vcs.xml
 /learning/rabbitmq/helloworld/.gradle/*
 /learning/rabbitmq/helloworld/.idea/*
 /learning/rabbitmq/helloworld/build/*
