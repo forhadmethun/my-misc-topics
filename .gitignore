@@ -38,3 +38,5 @@ gradle/wrapper/gradle-wrapper.properties
 /learning/rabbitmq/workerqueues/gradlew
 /learning/rabbitmq/workerqueues/gradlew.bat
 /learning/rabbitmq/workerqueues/settings.gradle
+/.idea/aws.xml
+/.idea/scala_settings.xml
