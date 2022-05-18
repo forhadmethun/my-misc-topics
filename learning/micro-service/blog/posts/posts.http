@@ -1,0 +1,14 @@
+@hostname = localhost
+@port = 30320
+@host = {{hostname}}:{{port}}
+
+GET http://{{host}}/posts
+
+###
+
+POST http://{{host}}/posts HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Hello post 3 again"
+}

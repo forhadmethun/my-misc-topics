@@ -1,0 +1,32 @@
+@hostname = localhost
+@port = 4002
+@host = {{hostname}}:{{port}}
+
+GET http://{{host}}/posts
+
+###
+
+POST http://{{host}}/events HTTP/1.1
+content-type: application/json
+
+{
+    "type": "PostCreated", 
+     "data": {
+        "id": "1234",
+        "title": "Hello post again"
+     }
+}
+
+###
+
+POST http://{{host}}/events HTTP/1.1
+content-type: application/json
+
+{
+    "type": "CommentCreated", 
+     "data": {
+         "id": "5678", 
+         "content": "A comment of post A", 
+         "postId": "1234"
+     }
+}

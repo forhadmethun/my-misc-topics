@@ -1,0 +1,15 @@
+@hostname = localhost
+@port = 4001
+@host = {{hostname}}:{{port}}
+@postId = c269312f
+
+GET http://{{host}}/posts/{{postId}}/comments
+
+###
+
+POST http://{{host}}/posts/{{postId}}/comments HTTP/1.1
+content-type: application/json
+
+{
+    "content": "Hello comments 3"
+}
