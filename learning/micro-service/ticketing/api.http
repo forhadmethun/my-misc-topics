@@ -1,0 +1,56 @@
+#@hostname = https://ticketing.dev/api/users
+#@port = 4001
+#
+#@host = {{hostname}}
+
+POST  https://ticketing.dev/api/users/signup
+content-type: application/json
+
+{
+    "email": "fo22rha2d@gmail.com", 
+    "password": "casdde"
+}
+
+###
+
+POST  https://ticketing.dev/api/users/signin
+content-type: application/json
+
+{
+    "email": "fo22rha2d@gmail.com", 
+    "password": "casdde"
+}
+###
+
+GET  https://ticketing.dev/api/users/currentuser
+content-type: application/json
+
+###
+POST  https://ticketing.dev/api/tickets
+content-type: application/json
+
+{
+  "title": "Cool movie ticket2",
+  "price": 12
+}
+
+###
+GET  https://ticketing.dev/api/tickets
+content-type: application/json
+
+###
+GET  https://ticketing.dev/api/tickets/628c1b00242464ba38fd6f8c
+content-type: application/json
+
+###
+PUT  https://ticketing.dev/api/tickets/628d3ac60869d1bc90590052
+content-type: application/json
+
+{
+  "title": "Cool movie ticket (updated)",
+  "price": 22
+}
+
+###
+POST  https://ticketing.dev/api/users/signout
+content-type: application/json
