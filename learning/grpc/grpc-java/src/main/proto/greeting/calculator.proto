@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package calculator;
+
+option java_package = "com.fm.grpc";
+option java_multiple_files = true;
+
+message CalculatorRequest {
+  int32 number = 1;
+}
+
+message CalculatorResponse {
+  int32 result = 1;
+}
+
+message SumRequest {
+  int64 firstNumber = 1;
+  int64 secondNumber = 2;
+}
+
+message SumResponse {
+  int64 result = 1;
+}
+
+
+service CalculatorService {
+  rpc sum(SumRequest) returns (SumResponse);
+  rpc calculate(CalculatorRequest) returns (stream CalculatorResponse);
+  rpc avg(stream CalculatorRequest) returns (CalculatorResponse);
+  rpc currentMax(stream CalculatorRequest) returns (stream CalculatorResponse);
+}
