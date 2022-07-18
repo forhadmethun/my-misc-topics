@@ -47,3 +47,8 @@ gradle/wrapper/gradle-wrapper.properties
 /learning/gradle/gradle/
 /learning/gradle/gradlew
 /learning/gradle/gradlew.bat
+/learning/rabbitmq/typewise-examples/.gradle/
+/learning/rabbitmq/typewise-examples/gradle/
+/learning/rabbitmq/typewise-examples/gradlew
+/learning/rabbitmq/typewise-examples/gradlew.bat
+/learning/rabbitmq/typewise-examples/build/
