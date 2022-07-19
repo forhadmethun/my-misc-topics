@@ -123,7 +123,7 @@ Credential storage both in client side(token) and in server side (database)
   - when human user is interecting with the system, not used as programmatic access to the server
 - http basic
   - http over ssl/tls
-  - base 64 encoded <userId> : <password>
+  - base 64 encoded `<userId> : <password>`
 - Digest based
   - like basic, but hashed
   - hash = md5 (username:realm:password)
@@ -274,7 +274,7 @@ Format: Header.Payload.Signature
 
 - header: algorithm, type
 - payload: data
-- Signature: hmac, rsa, 
+- Signature: hmac, rsa
   - hmacsha256(encode(header) + encode(payload) + secret)
 
 Maybe or may not be encrypted
