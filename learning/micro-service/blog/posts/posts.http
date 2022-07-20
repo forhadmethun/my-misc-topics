@@ -6,7 +6,7 @@ GET http://{{host}}/posts
 
 ###
 
-POST http://{{host}}/posts HTTP/1.1
+POST http://{{host}}/posts/create HTTP/1.1
 content-type: application/json
 
 {

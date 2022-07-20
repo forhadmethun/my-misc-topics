@@ -38,6 +38,12 @@ gradle/wrapper/gradle-wrapper.properties
 /learning/rabbitmq/workerqueues/gradlew
 /learning/rabbitmq/workerqueues/gradlew.bat
 /learning/rabbitmq/workerqueues/settings.gradle
+/learning/micro-service/blog/posts/node_modules
+/learning/micro-service/blog/comments/node_modules
+/learning/micro-service/blog/client/node_modules
+/learning/micro-service/blog/event-bus/node_modules
+/learning/micro-service/blog/moderation/node_modules
+/learning/micro-service/blog/query/node_modules
 /.idea/aws.xml
 /.idea/scala_settings.xml
 /learning/micro-service/ticketing/auth/node_modules/
@@ -52,3 +58,11 @@ gradle/wrapper/gradle-wrapper.properties
 /learning/rabbitmq/typewise-examples/gradlew
 /learning/rabbitmq/typewise-examples/gradlew.bat
 /learning/rabbitmq/typewise-examples/build/
+learning/micro-service/blog/client/package-lock.json
+learning/micro-service/blog/client/package-lock.json
+learning/micro-service/blog/query/package-lock.json
+learning/micro-service/blog/posts/package-lock.json
+learning/micro-service/blog/client/package-lock.json
+learning/micro-service/blog/client/package-lock.json
+learning/micro-service/blog/comments/package-lock.json
+learning/micro-service/blog/moderation/package-lock.json
