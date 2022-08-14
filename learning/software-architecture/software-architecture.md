@@ -311,3 +311,40 @@ Other alternative is SAML
   - encrypt first then to database
   - data cannot be viewed as queries
   - if added data protection is required
+
+### Common vulnerabilities
+
+#### SQL Injection
+
+sql statement is sent while making a API request
+
+```http
+
+GET http://abc.com/products?category=electronics';drop table products;--
+
+```
+
+Solution:
+
+- Use precompiled statements which accept param only by ? substitution
+
+#### Cross Site Scripting - XSS
+
+Attacker append js script in the target's side
+Suppose a comment containing script for sending cookie to the attacker.
+
+Solution:
+
+- validate the input
+
+#### Cross Site Resource Forgery  - CSRF
+
+Suppose we signed in a bank website with username / password & the bank issued a token in cookie.
+
+We are visiting a malicious site where inside an image there is script of sending money api of the bank embedded. So if the image is clicked then the url of the sending money will be called and as the cookie is set in browser so the bank will think that it's a valid request and accept it.
+
+Solution:
+
+Bank can send another header `csrf-token` and while sending token request the ui side which needs to send alongside token using javascript for the subsequent request to bank.
+The token needs to be httpOnly but the csrf-token shouldn't be, as the csrf-token will be set by js
+So attacker can send request to bank, but the csrf-token isn't sent so the request is invalid, it's sent as request header, not cookie
