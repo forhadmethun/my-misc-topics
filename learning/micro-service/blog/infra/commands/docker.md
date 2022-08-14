@@ -1,3 +1,5 @@
+# Docker commands
+
 docker build -t forhadmethun/posts .         # build a docker image and tag it as the given name
 docker run [image id or image tag]           # create and start a container based on the provided image id or tag
 docker run -it [image id or image tag] [cmd] # create & start container, but also override the default command
