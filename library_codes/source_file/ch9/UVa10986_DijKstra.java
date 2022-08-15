@@ -1,5 +1,5 @@
 // Sending email
-// standard SSSP problem
+// standard SSSP problem (DIJKSTRA)
 // demo using SPFA only
 // 2.442s in Java, 0.185s in C++
 
