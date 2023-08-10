@@ -66,3 +66,5 @@ learning/micro-service/blog/client/package-lock.json
 learning/micro-service/blog/client/package-lock.json
 learning/micro-service/blog/comments/package-lock.json
 learning/micro-service/blog/moderation/package-lock.json
+learning/ts/node_modules/
+learning/ts/package-lock.json
