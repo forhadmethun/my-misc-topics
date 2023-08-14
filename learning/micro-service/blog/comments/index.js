@@ -34,7 +34,7 @@ app.post('/posts/:id/comments', async (req, res) => {
             ...comment, 
             postId: req.params.id
         }
-    });
+    }).catch(e => {});
 
     res.status(201).send(commentsByPostId[req.params.id])
 });
@@ -56,7 +56,7 @@ app.post('/events', async (req, res) => {
                 ...comment, 
                 postId
             }
-        });
+        }).catch(e => {});
     }
 });
 

@@ -1,0 +1,19 @@
+@hostname = posts.com
+@port = 80
+@host = {{hostname}}:{{port}}
+
+GET http://{{host}}/posts
+
+###
+
+POST http://{{host}}/posts/create HTTP/1.1
+content-type: application/json
+
+{"title":"khela hobe"}
+
+###
+
+POST http://{{host}}/posts/52827de8/comments HTTP/1.1
+content-type: application/json
+
+{"content":"mc orange"}

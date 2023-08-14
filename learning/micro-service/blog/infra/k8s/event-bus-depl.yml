@@ -14,6 +14,7 @@ spec:
     spec:
       containers:
         - name: event-bus 
+          # image: forhadmethun/event-bus:0.0.1
           image: forhadmethun/event-bus
 
 --- 

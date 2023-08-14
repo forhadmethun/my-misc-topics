@@ -1,0 +1,14 @@
+@hostname = localhost
+@port = 4005
+@host = {{hostname}}:{{port}}
+
+GET http://{{host}}/events
+
+###
+
+POST http://{{host}}/events HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Hello post 4 again"
+}

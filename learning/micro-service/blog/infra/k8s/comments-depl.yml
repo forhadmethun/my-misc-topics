@@ -14,6 +14,7 @@ spec:
     spec:
       containers:
         - name: comments
+          # image: forhadmethun/comments:0.0.1
           image: forhadmethun/comments
 --- 
 apiVersion: v1 

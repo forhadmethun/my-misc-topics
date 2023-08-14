@@ -7,3 +7,14 @@ docker ps
 docker execc -it [container id] [cmd]       # execute the command while container running
 docker logs [container id]                  # print out logs from the given container
 docker push [image_tag]
+
+# Build images
+
+```sh
+docker build -t forhadmethun/posts:0.0.1 .
+docker build -t forhadmethun/client:0.0.1 .
+docker build -t forhadmethun/query:0.0.1 .
+docker build -t forhadmethun/moderation:0.0.1 .
+docker build -t forhadmethun/comments:0.0.1 .
+docker build -t forhadmethun/event-bus:0.0.1 .
+```

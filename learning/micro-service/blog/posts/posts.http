@@ -1,5 +1,5 @@
 @hostname = localhost
-@port = 30320
+@port = 31674
 @host = {{hostname}}:{{port}}
 
 GET http://{{host}}/posts

@@ -1,5 +1,6 @@
 # Kubernetes commands
 
+kubectl version
 kubectl get pods                        (`docker ps`)
 kubectl exec -it [pod_name] [cmd]       (`doker exec -it [container_id])[cmd`]
 `kubectl exec -it posts sh`

@@ -15,7 +15,7 @@ app.post('/events', async (req, res) => {
                 ...data, 
                 status
             }
-        });
+        }).catch(e => {});
     }
     res.send();
 });
