@@ -10,13 +10,13 @@ declare global {
 let mongo: any;
 beforeAll(async () => {
     process.env.JWT_KEY = 'asdf';
-    mongo = new MongoMemoryServer();
-    await mongo.start();
+    mongo = await MongoMemoryServer.create();
+    // await mongo.start();
     const mongoUri = await mongo.getUri();
 
     await mongoose.connect(mongoUri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
+        // useNewUrlParser: true,
+        // useUnifiedTopology: true
     } as ConnectOptions);
 });
 
@@ -27,10 +27,11 @@ beforeEach(async () => {
     }
 });
 
-afterAll(async () => {
-    await mongo.stop();
-    await mongoose.connection.close();
-});
+// afterAll(async () => {
+//     if (mongo)
+//         await mongo.stop();
+//     await mongoose.connection.close();
+// });
 
 global.signin = async () => {
     const response = await request(app)

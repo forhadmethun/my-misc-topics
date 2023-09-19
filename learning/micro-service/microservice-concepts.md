@@ -51,3 +51,6 @@
   - identify user stories
   - identify nouns in user stories
   - identify verb in user stories
+
+## Local Development
+ - use docker, kubernetes, skaffold
