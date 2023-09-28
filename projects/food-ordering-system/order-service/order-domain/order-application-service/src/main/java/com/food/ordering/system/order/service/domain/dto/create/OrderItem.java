@@ -1,6 +1,6 @@
 package com.food.ordering.system.order.service.domain.dto.create;
 
-import com.food.ordering.system.domain.valueobject.Money;
+import java.math.BigDecimal;
 import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ public class OrderItem {
   @NotNull
   private final Integer quantity;
   @NotNull
-  private final Money price;
+  private final BigDecimal price;
   @NotNull
-  private final Money subTotal;
+  private final BigDecimal subTotal;
 }

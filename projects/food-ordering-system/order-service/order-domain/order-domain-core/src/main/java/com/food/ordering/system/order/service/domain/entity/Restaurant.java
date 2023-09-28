@@ -14,6 +14,10 @@ public class Restaurant extends AggregateRoot<RestaurantId> {
     isActive = builder.isActive;
   }
 
+  public static Builder builder() {
+    return new Builder();
+  }
+
 
   public static final class Builder {
     private RestaurantId restaurantId;
@@ -27,7 +31,7 @@ public class Restaurant extends AggregateRoot<RestaurantId> {
       return new Builder();
     }
 
-    public Builder setRestaurantId(RestaurantId val) {
+    public Builder restaurantId(RestaurantId val) {
       restaurantId = val;
       return this;
     }
