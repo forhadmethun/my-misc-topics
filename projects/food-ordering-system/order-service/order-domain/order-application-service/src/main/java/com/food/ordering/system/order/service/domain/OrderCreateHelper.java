@@ -50,7 +50,7 @@ public class OrderCreateHelper {
 
   private Restaurant checkRestaurant(CreateOrderCommand createOrderCommand) {
     Restaurant restaurant = orderDataMapper.createOrderCommandToRestaurant(createOrderCommand);
-    Optional<Restaurant> optionalRestaurant = restaurantRepository.findByRestaurantInformation(restaurant);
+    Optional<Restaurant> optionalRestaurant = restaurantRepository.findRestaurantInformation(restaurant);
     if (optionalRestaurant.isEmpty()) {
       log.warn("Could not find restaurant with customer id: {}", restaurant.getId().getValue());
       throw new OrderDomainException(
